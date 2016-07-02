@@ -12,14 +12,14 @@
 // --------
 // includes
 // --------
-
+#include <iterator>  // std::istream_iterator
 #include <cassert>   // assert
 #include <iostream>  // ostream
 #include <stdexcept> // invalid_argument
 #include <string>    // string
 #include <vector>    // vector
-
-// -----------------
+#include <sstream>  // istringstream
+// ----------------
 // shift_left_digits
 // -----------------
 
@@ -360,7 +360,25 @@ class Integer {
          */
         explicit Integer (const std::string& value) {
             _x = C();
-            
+            int count = 1;
+           /* for(std::string::const_iterator it = value.begin(); it != value.end(); ++it){
+                
+                if(!(std::isdigit(*it)))
+                    throw std::invalid_argument("Not a valid string representation of an int");
+                    
+                    _x.push_back(stoi(*it));
+#ifdef DEBUG
+                std::cout << "2 Current digit at position " << count << " is " << (_x.back()) << std::endl;
+                count++;}
+#endif  */
+          std::stringstream ss(value);
+          char c;
+            while(ss >> c)
+            {   
+                int i = c - '0';
+                _x.push_back(i);
+                std::cout << _x.back() << std::endl;
+            }
             
         }
 
