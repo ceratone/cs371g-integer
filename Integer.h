@@ -4,6 +4,8 @@
 // Glenn P. Downing
 // ------------------------------
 
+#define DEBUG 1
+
 #ifndef Integer_h
 #define Integer_h
 
@@ -137,7 +139,7 @@ FI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 // Integer
 // -------
 
-template <typename T, typename C = std::vector<T>>
+template <typename T, typename C = std::vector<T> >
 class Integer {
     // -----------
     // operator ==
@@ -315,7 +317,7 @@ class Integer {
         // ----
 
         C _x; // the backing container
-        // <your data>
+        bool vector;
 
     private:
         // -----
@@ -323,7 +325,7 @@ class Integer {
         // -----
 
         bool valid () const { // class invariant
-            // <your code>
+            //
             return true;}
 
     public:
@@ -332,23 +334,39 @@ class Integer {
         // ------------
 
         /**
-         * <your documentation>
+         * Iteratively extract the least significant digits place and push to the back of the 
+         * container. 
          */
         Integer (int value) {
-            // <your code>
-            assert(valid());}
+            _x = C();
+#ifdef DEBUG
+            std::cout << value << std::endl;
+#endif
+            int count = 1;
+            while(value){
+                _x.push_back(value%10);
+#ifdef DEBUG
+                std::cout << "Current digit at position " << count << " is " << (_x.back()) << std::endl;
+                count++;
+#endif      
+                value/=10;
+            }
+            assert(valid());
+        }
 
         /**
-         * <your documentation>
+         * 
          * @throws invalid_argument if value is not a valid representation of an Integer
          */
         explicit Integer (const std::string& value) {
-            // <your code>
-            }
+            _x = C();
+            
+            
+        }
 
-                 Integer    (const Integer&) = default;
-                 ~Integer   ()               = default;
-        Integer& operator = (const Integer&) = default;
+                 Integer    (const Integer&) = default;		//copy constructor
+                 ~Integer   ()               = default;		//destructor
+        Integer& operator = (const Integer&) = default;		//copy assignment constructor
 
         // ----------
         // operator -

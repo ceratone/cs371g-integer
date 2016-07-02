@@ -23,14 +23,13 @@ int main () {
 
     // less than 500 ms
     cout << "*** 20th Mersenne prime: 1,332 digits ***" << endl << endl;
-
     {
-    const Integer<int> n = Integer<int>(2).pow(4423) - 1;
+    const Integer<int> n = Integer<int>(26786786);//.pow(4423) - 1;
     cout << "2^4423 - 1 = " << n << endl << endl;
     }
 
     {
-    const Integer<int, std::deque<int>> n = Integer<int, std::deque<int>>(2).pow(4423) - 1;
+    const Integer<int, std::deque<int> > n = Integer<int, std::deque<int> >(2).pow(4423) - 1;
     cout << "2^4423 - 1 = " << n << endl << endl;
     }
 
