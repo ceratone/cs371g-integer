@@ -315,9 +315,9 @@ class Integer {
         // ----
         // data
         // ----
-
+        int _myNum; //int value of int passed to integer class
         C _x; // the backing container
-        bool vector;
+        bool _vector;
 
     private:
         // -----
@@ -338,6 +338,7 @@ class Integer {
          * container. 
          */
         Integer (int value) {
+            _myNum =  value;
             _x = C();
 #ifdef DEBUG
             std::cout << value << std::endl;
@@ -361,23 +362,16 @@ class Integer {
         explicit Integer (const std::string& value) {
             _x = C();
             int count = 1;
-           /* for(std::string::const_iterator it = value.begin(); it != value.end(); ++it){
-                
-                if(!(std::isdigit(*it)))
-                    throw std::invalid_argument("Not a valid string representation of an int");
-                    
-                    _x.push_back(stoi(*it));
-#ifdef DEBUG
-                std::cout << "2 Current digit at position " << count << " is " << (_x.back()) << std::endl;
-                count++;}
-#endif  */
           std::stringstream ss(value);
-          char c;
-            while(ss >> c)
+          char d;
+            while(ss >> d)
             {   
-                int i = c - '0';
+                int i = d - '0';
                 _x.push_back(i);
-                std::cout << _x.back() << std::endl;
+#ifdef DEBUG
+                std::cout << "Current digit at position " << count << " is " << (_x.back()) << std::endl;
+                count++;
+#endif      
             }
             
         }
@@ -395,7 +389,8 @@ class Integer {
          */
         Integer operator - () const {
             // <your code>
-            return Integer(0);} // fix
+            int tmp = -_myNum;
+            return Integer(tmp);} // fix
 
         // -----------
         // operator ++
