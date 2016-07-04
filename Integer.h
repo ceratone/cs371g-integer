@@ -19,6 +19,7 @@
 #include <string>    // string
 #include <vector>    // vector
 #include <sstream>  // istringstream
+#include <cstdlib> //needed for atoi
 // ----------------
 // shift_left_digits
 // -----------------
@@ -361,6 +362,8 @@ class Integer {
          */
         explicit Integer (const std::string& value) {
             _x = C();
+            _myNum = std::atoi ( value.c_str());
+            std::cout << "Value of stoi fuction: " << _myNum << std::endl;
             int count = 1;
           std::stringstream ss(value);
           char d;
@@ -400,6 +403,21 @@ class Integer {
          * <your documentation>
          */
         Integer& operator ++ () {
+        //not sure if this how you implement the overload of add
+        //Needs a look over
+            if(this->_x < 9)
+            {
+                int tmp = _x.popback;
+                    ++tmp;
+                    _x.push_back(tmp);
+            }
+            else
+            {
+                //in this else I would check the container until
+                //I reach a number less than 9. Set all previous
+                //digits to zero, add 1 to the digit that was less
+                //than 9 then push all digits back into container.
+            }
             *this += 1;
             return *this;}
 
