@@ -495,7 +495,49 @@ class Integer {
          * <your documentation>
          */
         Integer& operator += (const Integer& rhs) {
-            // <your code>
+            
+            typename C::iterator it = this->_x.begin();
+            typename C::const_iterator rhs_it = rhs._x.begin();
+            bool carry = false;
+            std::cout << "Before while loop int operator method += " << std::endl;
+            int count = 1;
+            while(it != this->_x.end()){
+                *it = *it + *rhs_it;
+                std::cout << "Value of it_index"<<count<< ": " << *it << std::endl;
+                if(*it >= 10){
+                    *it %= 10;
+                    if(rhs_it != rhs._x.end()){
+                        ++rhs_it;
+                    }
+                    ++it;
+                    if(it == this->_x.end())
+                        carry = true;
+
+                    ++*it;
+                    if(rhs_it == rhs._x.end())
+                        break;
+                }
+                else{
+                
+                    ++it;
+                    if(rhs_it == rhs._x.end())
+                        break;
+                    ++rhs_it;
+                }
+                count++;
+            }
+
+            while(rhs_it != rhs._x.end()){
+                _x.push_back(*rhs_it);
+                ++rhs_it;
+            }
+#ifdef DEBUG                                                                    
+        count = 1;                                                      
+            for(typename C::iterator it = this->_x.begin(); it != this->_x.end(); ++it){    
+            std::cout << "Current digit at position " << count << " is " << *it << std::endl;
+            count++;                                                        
+            }                                                                   
+#endif 
             return *this;}
 
         // -----------
