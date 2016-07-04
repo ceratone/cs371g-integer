@@ -24,13 +24,15 @@ int main () {
     //Tests for Integer class methods
     cout << " Test Integer for Integer class methods" << endl;
     {
-    const Integer<int> n =  Integer<int>(-2678678);
     }
     // less than 500 ms
     cout << "*** 20th Mersenne prime: 1,332 digits ***" << endl << endl;
     {
-    const Integer<int> n = Integer<int>("26786786");//.pow(4423) - 1;
-    cout << "2^4423 - 1 = " << n << endl << endl;
+    Integer<int> q = Integer<int>(9999909);
+    ++q;
+    //q++;
+    //const Integer<int> n = Integer<int>("2678786");//.pow(4423) - 1;
+    //cout << "2^4423 - 1 = " << n << endl << endl;
     }
 
     {

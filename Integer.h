@@ -4,7 +4,7 @@
 // Glenn P. Downing
 // ------------------------------
 
-#define DEBUG 1
+#define DEBUG 
 
 #ifndef Integer_h
 #define Integer_h
@@ -13,6 +13,7 @@
 // includes
 // --------
 #include <iterator>  // std::istream_iterator
+#include <algorithm>
 #include <cassert>   // assert
 #include <iostream>  // ostream
 #include <stdexcept> // invalid_argument
@@ -311,6 +312,9 @@ class Integer {
      */
     friend Integer pow (Integer x, int e) {
         return x.pow(e);}
+    
+    /*public: 
+        using container_type = C;*/
 
     private:
         // ----
@@ -318,6 +322,7 @@ class Integer {
         // ----
         int _myNum; //int value of int passed to integer class
         C _x; // the backing container
+        bool neg;
         bool _vector;
 
     private:
@@ -341,18 +346,18 @@ class Integer {
         Integer (int value) {
             _myNum =  value;
             _x = C();
-#ifdef DEBUG
-            std::cout << value << std::endl;
-#endif
-            int count = 1;
             while(value){
                 _x.push_back(value%10);
-#ifdef DEBUG
-                std::cout << "Current digit at position " << count << " is " << (_x.back()) << std::endl;
-                count++;
-#endif      
                 value/=10;
             }
+#ifdef DEBUG
+            int count = 1;
+            for(typename C::iterator it = _x.begin(); it != _x.end(); ++it){
+                std::cout << "Current digit at position " << count << " is " << *it << std::endl;
+                count++;
+            }
+            std::cout << std::endl;
+#endif
             assert(valid());
         }
 
@@ -363,20 +368,25 @@ class Integer {
         explicit Integer (const std::string& value) {
             _x = C();
             _myNum = std::atoi ( value.c_str());
-            std::cout << "Value of stoi fuction: " << _myNum << std::endl;
-            int count = 1;
-          std::stringstream ss(value);
-          char d;
-            while(ss >> d)
-            {   
-                int i = d - '0';
-                _x.push_back(i);
+            std::stringstream ss(value);
+            char d;
+                while(ss >> d)
+                {   
+
+                    int i = d;
+                    if(i > 57 || i < 48)
+                        throw std::invalid_argument ("Not a valid representation of an integer: 0-9");
+                    _x.push_back(i-'0');
+                    
+                }
+            std::reverse(_x.begin(), _x.end());
 #ifdef DEBUG
-                std::cout << "Current digit at position " << count << " is " << (_x.back()) << std::endl;
+            int count = 1;
+            for(typename C::iterator it = _x.begin(); it != _x.end(); ++it){
+                std::cout << "Current digit at position " << count << " is " << *it << std::endl;
                 count++;
-#endif      
             }
-            
+#endif
         }
 
                  Integer    (const Integer&) = default;		//copy constructor
@@ -388,12 +398,17 @@ class Integer {
         // ----------
 
         /**
-         * <your documentation>
+         * 
          */
         Integer operator - () const {
-            // <your code>
-            int tmp = -_myNum;
-            return Integer(tmp);} // fix
+            Integer x = *this;
+            for(typename C::iterator it = x._x.begin(); it != x._x.end(); ++it){
+                //std::cout << "Result of negate("<<*it<<") is: ";
+                *it = -(*it);
+                //std::cout << *it << std::endl;
+            }            
+            //int tmp = -_myNum;
+            return x;}//Integer(tmp);} // fix
 
         // -----------
         // operator ++
@@ -405,20 +420,44 @@ class Integer {
         Integer& operator ++ () {
         //not sure if this how you implement the overload of add
         //Needs a look over
-            if(this->_x < 9)
-            {
-                int tmp = _x.popback;
-                    ++tmp;
-                    _x.push_back(tmp);
+            typename C::iterator it = this->_x.begin();
+            bool carry = true;
+            while(carry){
+                ++*it;
+                if(*it == 10){
+                    *it = 0;
+                    if(it == this->_x.end()){
+                        this->_x.push_back(1);
+                        carry = false;
+                    }
+                    else
+                        it++;
+                }
+                else
+                    carry = false;
             }
-            else
-            {
-                //in this else I would check the container until
-                //I reach a number less than 9. Set all previous
-                //digits to zero, add 1 to the digit that was less
-                //than 9 then push all digits back into container.
+#ifdef DEBUG
+            int count = 1;
+            for(typename C::iterator its = _x.begin(); its != _x.end(); ++its){
+                std::cout << "Current digit at position " << count << " is " << *its << std::endl;
+                count++;
             }
-            *this += 1;
+            std::cout << std::endl;
+#endif
+            // if(this->_x < 9)
+            // {
+            //     int tmp = _x.pop_back();
+            //         ++tmp;
+            //         _x.push_back(tmp);
+            // }
+            // else
+            // {
+            //     //in this else I would check the container until
+            //     //I reach a number less than 9. Set all previous
+            //     //digits to zero, add 1 to the digit that was less
+            //     //than 9 then push all digits back into container.
+            // }
+            //*this += 1;
             return *this;}
 
         /**
@@ -550,6 +589,7 @@ class Integer {
          */
         Integer& pow (int e) {
             // <your code>
-            return *this;}};
+            return *this;}
+        };
 
 #endif // Integer_h
