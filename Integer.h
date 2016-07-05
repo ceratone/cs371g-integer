@@ -353,7 +353,7 @@ class Integer {
 #ifdef DEBUG
             int count = 1;
             for(typename C::iterator it = _x.begin(); it != _x.end(); ++it){
-                std::cout << "Current digit at position " << count << " is " << *it << std::endl;
+                std::cout << "int const: Current digit at position " << count << " is " << *it << std::endl;
                 count++;
             }
             std::cout << std::endl;
@@ -383,7 +383,7 @@ class Integer {
 #ifdef DEBUG
             int count = 1;
             for(typename C::iterator it = _x.begin(); it != _x.end(); ++it){
-                std::cout << "Current digit at position " << count << " is " << *it << std::endl;
+                std::cout << "explicit const: Current digit at position " << count << " is " << *it << std::endl;
                 count++;
             }
 #endif
@@ -439,7 +439,7 @@ class Integer {
 #ifdef DEBUG
             int count = 1;
             for(typename C::iterator its = _x.begin(); its != _x.end(); ++its){
-                std::cout << "Current digit at position " << count << " is " << *its << std::endl;
+                std::cout << "++: Current digit at position " << count << " is " << *its << std::endl;
                 count++;
             }
             std::cout << std::endl;
@@ -498,43 +498,68 @@ class Integer {
             
             typename C::iterator it = this->_x.begin();
             typename C::const_iterator rhs_it = rhs._x.begin();
+            typename C::iterator end_lhs = this->_x.end();
+            
             bool carry = false;
-            std::cout << "Before while loop int operator method += " << std::endl;
-            int count = 1;
-            while(it != this->_x.end()){
-                *it = *it + *rhs_it;
-                std::cout << "Value of it_index"<<count<< ": " << *it << std::endl;
-                if(*it >= 10){
-                    *it %= 10;
-                    if(rhs_it != rhs._x.end()){
-                        ++rhs_it;
-                    }
-                    ++it;
-                    if(it == this->_x.end())
-                        carry = true;
+            while(rhs_it!= rhs._x.end()){
 
-                    ++*it;
-                    if(rhs_it == rhs._x.end())
-                        break;
+                if(it != end_lhs){
+                    *it = *it + *rhs_it;
+                    if(carry){
+                        ++*it;
+                        carry = false;
+                    }
+                    if(*it >= 10){
+                        *it %=10;
+                        carry = true;
+                    }
+                    it++;
                 }
                 else{
-                
-                    ++it;
-                    if(rhs_it == rhs._x.end())
-                        break;
-                    ++rhs_it;
-                }
-                count++;
-            }
+                    if(carry){
+                        int temp = *rhs_it+1;
+                        if(temp>=10){
+                            carry = true;
+                            temp %= 10;
+                        }
+                        else
+                            carry = false;
 
-            while(rhs_it != rhs._x.end()){
-                _x.push_back(*rhs_it);
-                ++rhs_it;
+                        this->_x.push_back(temp);
+                        
+                    }
+                    else{
+                        this->_x.push_back(*rhs_it);
+                    }
+                }
+                rhs_it++;
             }
+            if(carry){
+                if(it != this->_x.end())
+                {
+                    while(carry){
+                        if(it == this->_x.end()){
+                            this->_x.push_back(1);
+                            carry = false;
+                        }
+                        else if(*it == 10){
+                            *it = 0;
+                            carry = true;
+                            it++;
+                        }
+                        else{
+                            carry = false;
+                        }
+                        ++*it;
+                    }
+                }
+            }
+            
+
 #ifdef DEBUG                                                                    
-        count = 1;                                                      
-            for(typename C::iterator it = this->_x.begin(); it != this->_x.end(); ++it){    
-            std::cout << "Current digit at position " << count << " is " << *it << std::endl;
+            int count = 1;                                                      
+            for(typename C::iterator its = this->_x.begin(); its != this->_x.end(); ++its){    
+            std::cout << "+=: Current digit at position " << count << " is " << *its << std::endl;
             count++;                                                        
             }                                                                   
 #endif 

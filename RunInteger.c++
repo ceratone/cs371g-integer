@@ -28,9 +28,9 @@ int main () {
     // less than 500 ms
     cout << "*** 20th Mersenne prime: 1,332 digits ***" << endl << endl;
     {
-    const Integer<int> q = Integer<int>(34786);
+    const Integer<int> q = Integer<int>("12");
     //++q;
-    Integer<int> p = Integer<int>(67);
+    Integer<int> p = Integer<int>("4");
     p+=q;
     //q++;
     //const Integer<int> n = Integer<int>("2678786");//.pow(4423) - 1;
