@@ -22,8 +22,23 @@ int main () {
     cout << "RunInteger.c++" << endl << endl;
     
     //Tests for Integer class methods
-    cout << " Test Integer for Integer class methods" << endl;
+    cout << " Test methods for Integer class methods" << endl;
     {
+        vector<int> v;
+        vector<int> output(6, 2);
+        vector<int>::iterator iter;
+        
+
+        v.push_back(1);
+        v.push_back(2);
+        v.push_back(3);
+
+        vector<int>::iterator it = output.begin();
+
+        minus_digits(v.begin(), v.end(), output.begin(), output.end(), it );
+
+
+
     }
     // less than 500 ms
     cout << "*** 20th Mersenne prime: 1,332 digits ***" << endl << endl;

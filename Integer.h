@@ -141,7 +141,7 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 		carry = false;
                 
 		
-                std::cout << "MD: Value of diff after not subtracting dig_2: " << diff << std::endl;
+                std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
 		*x = diff;
                 ++x;
                 ++b1;
@@ -149,7 +149,7 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
                 count++;
         }
 
-        std::cout << "MD: This value should equal len1: " << count << std::endl;
+        std::cout << "MD: Count should equal len1: " << count << std::endl;
 
         while(e2 != b2){
             
@@ -205,6 +205,41 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 			
 	}
 
+    }
+    else if(len2 == len1){
+	    
+	    
+	    while(e1 != b1){
+            	dig_1 = *b1;
+            	dig_2 = *b2;
+
+            std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
+            std::cout << "MD: Value of dig_2: " << dig_2 << std::endl << std::endl;
+            diff = dig_1 - dig_2;
+            	if(diff < 0){
+                	carry = true;
+                	dig_1+=10;
+                	diff = dig_1 - dig_2;
+		
+                std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
+                std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
+               
+           	 }
+	    	else
+			carry = false;
+	 
+               	 std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
+		
+			*x = diff;
+                	++x;
+                	++b1;
+                	++b2;
+                	count++;
+		
+	     }
+		
+	
+	
     }
 
 	//delete this after testing
