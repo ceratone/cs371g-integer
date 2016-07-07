@@ -173,7 +173,171 @@ template <typename II1, typename II2, typename FI>
  */
 template <typename II1, typename II2, typename FI>
 FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
+<<<<<<< HEAD
     
+=======
+    // <your code>
+    int len1 = 0;
+    int len2 = 0;
+    int rangeDiff;
+    int dig_1;
+    int dig_2;
+    int diff;
+    bool carry = false;
+    II1 e1_copy = e1;
+    II2 e2_copy = e2;
+    FI x_begin = x;
+    //++b1;
+
+    while(e1_copy != b1){
+        ++len1;
+        --e1_copy;
+    }
+    //++b2;
+    while(e2_copy != b2){
+        ++len2;
+        --e2_copy;
+    }
+
+    int count = 0;
+
+    if(len2 > len1){
+        rangeDiff = len2 - len1;
+        std::cout << "MD: Value of RangeDiff: " << rangeDiff << std::endl;
+        while(e1 != b1){
+            dig_1 = *b1;
+            dig_2 = *b2;
+
+            std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
+            std::cout << "MD: Value of dig_2: " << dig_2 << std::endl << std::endl;
+            diff = dig_1 - dig_2;
+            if(diff < 0){
+                carry = true;
+                dig_1+=10;
+                diff = dig_1 - dig_2;
+                std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
+                std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
+               
+            }
+	    else
+		carry = false;
+                
+		
+                std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
+		*x = diff;
+                ++x;
+                ++b1;
+                ++b2;
+                count++;
+        }
+
+        std::cout << "MD: Count should equal len1: " << count << std::endl;
+
+        while(e2 != b2){
+            
+            dig_1 = 10;
+            dig_2 = *b2;
+            diff = dig_1 - dig_2;
+	    std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
+            *x = diff;
+            ++x;
+            ++b2;
+            count++;
+        }
+
+        std::cout << "MD: Len1 + rangeDiff: " << count << std::endl << std::endl << std::endl;
+		
+		int output_len = rangeDiff + len1;
+        if(carry){
+            
+	    --x;
+            for(int i = 0; i < output_len; i++){
+                diff = 10 - *x;
+                *x = diff;
+		std::cout << "This is the value of *x: " << *x << std::endl;
+                --x;
+            }
+
+        //std::cout << "This is the value of *x: " << *x << std::endl;
+
+            //diff = 9 - *x;
+        }
+	else{
+		
+		--x;
+		std::cout << "Starting value of *x: " << *x << std::endl;
+		int loopRange = rangeDiff + len1;
+		int tmpRange = rangeDiff ;
+		int k = 0;
+		
+		//std::cout << "This is the value of *x: " << *x << std::endl;
+	    for(int i = 0; i < loopRange; i++){
+		
+		diff = 10 - *x;
+		if(diff == 10)
+			diff = 0;
+		if(k == tmpRange - 1)
+			--diff;
+
+		*x = diff;
+		k++;
+		std::cout << "This is the value of *x: " << *x << std::endl;
+		--x;
+	    }
+			
+	}
+
+    }
+    else if(len2 == len1){
+	    
+	    
+	    while(e1 != b1){
+            	dig_1 = *b1;
+            	dig_2 = *b2;
+
+            std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
+            std::cout << "MD: Value of dig_2: " << dig_2 << std::endl << std::endl;
+            diff = dig_1 - dig_2;
+            	if(diff < 0){
+                	carry = true;
+                	dig_1+=10;
+                	diff = dig_1 - dig_2;
+		
+                std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
+                std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
+               
+           	 }
+	    	else
+			carry = false;
+	 
+               	 std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
+		
+			*x = diff;
+                	++x;
+                	++b1;
+                	++b2;
+                	count++;
+		
+	     }
+		
+	
+	
+    }
+
+	//delete this after testing
+        int out_len = rangeDiff + len1;
+	++x;
+        for(int i = 0; i < out_len; i++){
+
+            std::cout << "Value of * x: " <<  *x << "  Pos in x: " << i << std::endl;
+            ++x; 
+        }
+	std::cout << std::endl;
+        std::cout << "MD: Value of output_len: "  << out_len << std::endl;
+        std::cout << "Minus_digits; Checking len of input iterator 1: " << len1 << std::endl;
+        std::cout << "Minus_digits; Checking len of input iterator 2: " << len2 << std::endl;
+
+>>>>>>> 8d5b9cffcdc49a38193eb0571228987aa930180c
     return x;}
 
 // -----------------
@@ -699,11 +863,21 @@ template <typename T, typename C = std::vector<T> >
         /**
          * <your documentation>
          */
+<<<<<<< HEAD
          Integer& operator -= (const Integer& rhs) {
             typename C::iterator it = this->_x.begin();
             typename C::const_iterator rhs_it = rhs._x.begin();
 
             
+=======
+        Integer& operator -= (const Integer& rhs) {
+            // <your code>
+            typename C::iterator it = this->_x.begin();
+            typename C::const_iterator rhs_it = rhs._x.begin();
+            typename C::iterator end_lhs = this->_x.end();
+
+            bool carry = false;
+>>>>>>> 8d5b9cffcdc49a38193eb0571228987aa930180c
             return *this;}
 
         // -----------
