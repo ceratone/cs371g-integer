@@ -215,7 +215,8 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 
             std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
             std::cout << "MD: Value of dig_2: " << dig_2 << std::endl << std::endl;
-            diff = dig_1 - dig_2;
+            	diff = dig_1 - dig_2;
+		int chk_diff = diff;
             	if(diff < 0){
                 	carry = true;
                 	dig_1+=10;
@@ -225,30 +226,135 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
                 std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
                
            	 }
-	    	else
+	    	else{
+			if(carry && diff != 0){
+			   int tmp = diff;	
+			   diff = 9 - tmp;
+			}					
+
 			carry = false;
-	 
+		}	 
                	 std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
+
+		if(carry){
+			int tmp = diff;
+			diff = 10 - tmp;
+		}
+		
 		
 			*x = diff;
                 	++x;
                 	++b1;
                 	++b2;
                 	count++;
-		
+		if(carry && e1 != b1)
+		{
+			int chk_1 = *b1;
+			int chk_2 = *b2;
+			
+			if(chk_1 == 0)
+				*b1 = 9;
+			if(chk_1 > 0 && chk_1 > chk_2)
+				--*b1;
+				
+		}
+
+		if(carry && e1 == b1){
+		    --x;
+
+		    if(chk_diff == 0 || chk_diff == 1)
+			++x;
+
+		    if(chk_diff > 0 ){
+			--diff;
+			*x = diff;
+			++x;	
+		    }
+		    ++x;
+		    
+			
+		}
 	     }
 		
 	
 	
     }
+    else{
+	bool nxt_carry;	 
+	while(e2 != b2){
+            	dig_1 = *b1;
+            	dig_2 = *b2;
+
+            
+            	diff = dig_1 - dig_2;
+	    std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
+            std::cout << "MD: Value of dig_2: " << dig_2 << std::endl;
+	    std::cout << "MD: Value of chkdiff: " << diff << std::endl << std::endl; 
+		int chk_diff = diff;
+            	if(diff < 0){
+                	carry = true;
+                	dig_1+=10;
+                	diff = dig_1 - dig_2;
+		
+                std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
+                std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
+               
+           	 }
+	    	else{
+			if(carry)    				   				   nxt_carry = true;
+									
+			carry = false;
+		}	 
+               	 std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
+
+		
+		
+			*x = diff;
+                	++x;
+                	++b1;
+                	++b2;
+                
+			count++;
+		if(carry)
+		{
+			int chk_1 = *b1;
+			//int chk_2 = *b2;
+			
+			if(chk_1 == 0)
+				*b1 = 9;
+			if(chk_1 > 0)
+				--*b1;
+				
+		}
+		
+		if(!carry && nxt_carry)
+			--*b1;
+	    }
+		
+		
+
+		while(e1 != b1){
+		    dig_1 = *b1;
+            	    dig_2 = 0;
+            	    diff = dig_1 - dig_2;
+	    	    std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
+            	    *x = diff;
+            	    ++x;
+            	    ++b1;
+            	    count++;
+
+		}
+    }
 
 	//delete this after testing
-        int out_len = rangeDiff + len1;
-	++x;
-        for(int i = 0; i < out_len; i++){
+	
+        int out_len = len1;
+	--x;
+	
+        for(int i = 1; i < out_len + 1; i++){
 
             std::cout << "Value of * x: " <<  *x << "  Pos in x: " << i << std::endl;
-            ++x; 
+            --x; 
         }
 	std::cout << std::endl;
         std::cout << "MD: Value of output_len: "  << out_len << std::endl;
