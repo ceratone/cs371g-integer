@@ -1,0 +1,53 @@
+commit f1b09ef3dad2ea4b353bd7d1f38b4bac7b7dd097
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Mon Jul 4 19:48:12 2016 -0500
+
+    += finished, working on -=
+
+commit e5ef8fb348698d91a29dbeb8dbe630b4944f0aa5
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Mon Jul 4 18:20:26 2016 -0500
+
+    updated operater += method
+
+commit bca88922072c31a5b697700aca66e49066a701c7
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Mon Jul 4 15:53:06 2016 -0500
+
+    working on += operator
+
+commit b0f0889cd7b27598de987fd8e2c2ca1483a1b3b6
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Sun Jul 3 23:54:34 2016 -0500
+
+    Started method overload of ++
+
+commit da7a895f26f80bde980b975b7a724e2a1130016a
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Sun Jul 3 04:10:35 2016 -0500
+
+    Attempt at operator- () const minus
+
+commit 9680b292d006a3c2c2e99bd6956eeef76226554e
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Sat Jul 2 16:32:06 2016 -0500
+
+    updated explicit Integer constructor
+
+commit 2d843413451e9a6d4e3841a351198f454a2a5c09
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Sat Jul 2 15:31:34 2016 -0500
+
+    reading in an int
+
+commit 6faf428d7cfa0ae195aaff21c70b710054049563
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Fri Jul 1 12:11:55 2016 -0500
+
+    all files present
+
+commit 8e02da766497674feba6b1630dd5c10a8b843234
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Fri Jul 1 12:04:08 2016 -0500
+
+    initial commit
