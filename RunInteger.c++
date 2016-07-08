@@ -25,13 +25,14 @@ int main () {
     cout << " Test methods for Integer class methods" << endl;
     {
         vector<int> v;
-        vector<int> output(6, 2);
+        vector<int> output(4, 6);
         vector<int>::iterator iter;
         
-
-        v.push_back(1);
-        v.push_back(2);
-        v.push_back(3);
+	v.push_back(3);
+        v.push_back(0);
+        v.push_back(5);
+        v.push_back(5);
+	v.push_back(5);
 
         vector<int>::iterator it = output.begin();
 
