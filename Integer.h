@@ -409,8 +409,13 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 				
 		}
 		
-		if(!carry && nxt_carry)
-			--*b1;
+		if(!carry && nxt_carry){
+			int chk_1 = *b1;
+			if(chk_1 == 0)
+				*b = 9;
+			if(chk_1 > 0)
+				--*b1;
+		}
 	    }
 		
 		
@@ -443,7 +448,6 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
         std::cout << "Minus_digits; Checking len of input iterator 1: " << len1 << std::endl;
         std::cout << "Minus_digits; Checking len of input iterator 2: " << len2 << std::endl;
 
->>>>>>> 8d5b9cffcdc49a38193eb0571228987aa930180c
     return x;}
 
 // -----------------
@@ -464,6 +468,57 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 template <typename II1, typename II2, typename FI>
  FI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
     // <your code>
+	II1 b1_copy = b1;
+	II1 e1_copy = e1;
+
+	II2 b2_copy = b2;
+	II2 e2_copy = e2;
+	II1 sum1 = b1;
+	II2 sum2 = b2;
+	FI x_copy = x;
+	int lenseq1 = 0;
+	int lenseq2 = 0;
+	int pow = 1;
+	while(e1_copy != b1_copy){
+        	++lenseq1;
+        	--e1_copy;
+    	}
+    //++b2;
+    	while(e2_copy != b2_copy){
+        	++lenseq2;
+        	--e2_copy;
+    	}
+
+	
+		e2_copy = e2;
+		e1_copy = e1;
+
+	if(lenseq1 > lenseq2){
+	    
+	    for(int i = 1; i < lenseq2 + 1; ++i){
+		
+		int loopSum = *e2_copy;
+		
+		if(loopSum % 2 == 0 && loopSum != 0){
+		    vector<int>designate(1, 1);
+			
+		    FI tmp = designate.begin();
+			++tmp;
+		    plus_digits (b1_copy, e1_copy, b1_copy, e1_copy, x_copy);
+		}
+		else{
+		}
+		pow*=10;
+		++e2_copy;	   
+	    }
+		
+	}
+	
+	if(lenseq1 < lenseq2){
+	}
+
+	if(lenseq1 == lenseq2{
+	}
     return x;}
 
 // --------------
@@ -969,7 +1024,7 @@ template <typename T, typename C = std::vector<T> >
         /**
          * <your documentation>
          */
-<<<<<<< HEAD
+
          Integer& operator -= (const Integer& rhs) {
             typename C::iterator it = this->_x.begin();
             typename C::const_iterator rhs_it = rhs._x.begin();
