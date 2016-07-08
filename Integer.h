@@ -432,7 +432,7 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
     }
 
 	//delete this after testing
-	
+/*	
         int out_len = len1;
 	--x;
 	
@@ -443,9 +443,9 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
         }
 	std::cout << std::endl;
         std::cout << "MD: Value of output_len: "  << out_len << std::endl;
-        std::cout << "Minus_digits; Checking len of input iterator 1: " << len1 << std::endl;
+        //std::cout << "Minus_digits; Checking len of input iterator 1: " << len1 << std::endl;
         std::cout << "Minus_digits; Checking len of input iterator 2: " << len2 << std::endl;
-
+*/
     return x;}
 
 // -----------------
@@ -498,10 +498,10 @@ template <typename II1, typename II2, typename FI>
 		int loopSum = *e2_copy;
 		
 		if(loopSum % 2 == 0 && loopSum != 0){
-		    vector<int> v;
+		    //vector<int> v;
 			
-		    FI tmp = v.begin();
-			++tmp;
+		    //FI tmp = v.begin();
+			//++tmp;
 		    plus_digits (b1_copy, e1_copy, b1_copy, e1_copy, x_copy);
 		}
 		else{
@@ -1032,12 +1032,47 @@ template <typename T, typename C = std::vector<T> >
 
         Integer& operator -= (const Integer& rhs) {
             // <your code>
-            typename C::iterator it = this->_x.begin();
-            typename C::const_iterator rhs_it = rhs._x.begin();
-            typename C::iterator end_lhs = this->_x.end();
+            typename C::iterator b1 = this->_x.begin();
+            typename C::const_iterator b2 = rhs._x.begin();
+            typename C::iterator e1 = this->_x.end();
 
             bool carry = false;
 
+            typename C::const_iterator e2 = rhs._x.end();
+            int larger = this->_len;
+            if(rhs._len > larger)
+                larger = rhs._len;
+            C newContainer(larger + 1);
+            if(this->_neg == rhs._neg){
+                typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
+                this->_len = newSize - newContainer.begin();
+                //std::cout << "newSize: " << this->_len <<std::endl;
+                this->_x = newContainer;
+                this->_x.resize(this->_len);
+            }
+
+            else{
+                typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
+                this->_len = newSize - newContainer.begin();
+                //std::cout << "newSize: " << this->_len <<std::endl;
+                this->_x = newContainer;
+                this->_x.resize(this->_len);
+            }
+            //std::cout << "End of newContainer: " << *(--newContainer.end()) <<std::endl;
+            // if(*(newContainer.end()--) == 0){
+            //     this->_len = newContainer.size() - 1;
+            //     std::cout << "newSize smaller: " << this->_len <<std::endl;
+            // }
+            // else
+                
+     
+#ifdef DEBUG                                                                    
+            int count = 1;                                                      
+            for(typename C::iterator its = this->_x.begin(); its != this->_x.end(); ++its){    
+                std::cout << "+=: Current digit at position " << count << " is " << *its << std::endl;
+                count++;                                                        
+            }                                                                   
+#endif 
             return *this;}
 
         // -----------
