@@ -1,3 +1,28 @@
+commit 0174c5585761e0c1869e9561ccff9f5320831279
+Merge: 72b014b 8d5b9cf
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Thu Jul 7 13:31:02 2016 -0500
+
+    inequalities, plus_digits, ==, ++, abs, neg, some tests done
+
+commit 72b014bcc81bc72e361e0d573a5a4b7e8044cf49
+Author: Darya Mylius <daryam@cs.utexas.edu>
+Date:   Thu Jul 7 13:30:37 2016 -0500
+
+    inequalities, plus_digits, ==, ++, abs, neg, some tests done
+
+commit 8d5b9cffcdc49a38193eb0571228987aa930180c
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Wed Jul 6 17:11:27 2016 -0500
+
+    working on when both sequences equal
+
+commit 99c68ad60048b94f6e61b3ffe12bdafbedc5a858
+Author: Jesse Jones <Jtjones756@utexas.edu>
+Date:   Wed Jul 6 02:56:04 2016 -0500
+
+    Updated minus digits for 2nd sequence greater in length than first sequence
+
 commit f1b09ef3dad2ea4b353bd7d1f38b4bac7b7dd097
 Author: Darya Mylius <daryam@cs.utexas.edu>
 Date:   Mon Jul 4 19:48:12 2016 -0500
