@@ -173,9 +173,7 @@ template <typename II1, typename II2, typename FI>
  */
 template <typename II1, typename II2, typename FI>
 FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
-<<<<<<< HEAD
-    
-=======
+
     // <your code>
     int len1 = 0;
     int len2 = 0;
@@ -412,7 +410,7 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 		if(!carry && nxt_carry){
 			int chk_1 = *b1;
 			if(chk_1 == 0)
-				*b = 9;
+				*b1 = 9;
 			if(chk_1 > 0)
 				--*b1;
 		}
@@ -500,9 +498,9 @@ template <typename II1, typename II2, typename FI>
 		int loopSum = *e2_copy;
 		
 		if(loopSum % 2 == 0 && loopSum != 0){
-		    vector<int>designate(1, 1);
+		    vector<int> v;
 			
-		    FI tmp = designate.begin();
+		    FI tmp = v.begin();
 			++tmp;
 		    plus_digits (b1_copy, e1_copy, b1_copy, e1_copy, x_copy);
 		}
@@ -517,7 +515,7 @@ template <typename II1, typename II2, typename FI>
 	if(lenseq1 < lenseq2){
 	}
 
-	if(lenseq1 == lenseq2{
+	if(lenseq1 == lenseq2){
 	}
     return x;}
 
@@ -1025,12 +1023,13 @@ template <typename T, typename C = std::vector<T> >
          * <your documentation>
          */
 
-         Integer& operator -= (const Integer& rhs) {
+         /*Integer& operator -= (const Integer& rhs) {
             typename C::iterator it = this->_x.begin();
             typename C::const_iterator rhs_it = rhs._x.begin();
+	    }*/
 
             
-=======
+
         Integer& operator -= (const Integer& rhs) {
             // <your code>
             typename C::iterator it = this->_x.begin();
@@ -1038,7 +1037,7 @@ template <typename T, typename C = std::vector<T> >
             typename C::iterator end_lhs = this->_x.end();
 
             bool carry = false;
->>>>>>> 8d5b9cffcdc49a38193eb0571228987aa930180c
+
             return *this;}
 
         // -----------
