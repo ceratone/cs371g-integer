@@ -482,15 +482,16 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 template <typename II1, typename II2, typename FI>
  FI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
     // <your code>
+
 	II1 b1_copy = b1;
 	II1 e1_copy = e1;
 
 	II2 b2_copy = b2;
 	II2 e2_copy = e2;
-    II1 sum;
 	FI x_init = x;
     FI x_end = x_init;
-    FI result = x;
+    FI result_fr = x;
+    FI result_end = result_fr;
 	int lenseq1 = 0;
 	int lenseq2 = 0;
 	int product = 0;
@@ -512,47 +513,64 @@ template <typename II1, typename II2, typename FI>
 
 	if(lenseq1 > lenseq2){
 	    while(e2_copy != b2_copy){
+        
+        int count = 0;
             for(int i = 0; i < dec_pos; ++i){
                 
-                ++x_init;
-                *x_init = 0;
+                ++x_end;
+                *x_end = 0;
             }
                 while(e1_copy != b1_copy){
                     product = (*e1_copy) * (*e2_copy) + carry;
                     carry = product/10;
-                    ++x_init;
-                    *x_init = product % 10;
+                    ++x_end;
+                    *x_end = product % 10;
                     --e1_copy;
+                
                 }
                 
                 if(carry > 0){
-                    ++x_init;
-                    *x_init = carry;
-                }
-                
-                int count = 0;
-                II1 sum_begin;
-                while(x_end != x_init){
-                   
-                   if(count = 0){
-                        *sum = *x_end;
-                        sum_begin = sum;
-                        ++sum;
-                        ++x_end;
-                    }
-                    ++count;
+                    ++x_end;
+                    *x_end = 0;
                 }
 
-                //x = plus_digits(sum_begin, sum, 
+            II1 tmp;
+            II2 tmp_end;
+            
+            while(x_end != x_init){
+                *tmp = *x_init;
+                if(count == 0)
+                    tmp_end = tmp;
+                ++x_init;
+                ++tmp;
+            }
 
-            }	
-	}
-	
+            int chk = 0;
+            II1 rhs_param;
+            II1 rhs_param_end;
+
+            while(result_end != result_fr){
+                *rhs_param = *result_end;
+                if(chk ==0)
+                    rhs_param_end = rhs_param;
+                ++rhs_param;
+                ++result_end;
+            }
+
+            result_end = plus_digit(tmp, tmp_end, rhs_param, rhs_param_end);
+            
+            ++dec_pos;
+            x_init = x;
+            --e2_copy;
+        }
+    }
 	if(lenseq1 < lenseq2){
 	}
 
 	if(lenseq1 == lenseq2){
 	}
+
+    x = result_end;
     return x;}
 
 // --------------
