@@ -201,21 +201,26 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 
     if(len2 > len1){
         rangeDiff = len2 - len1;
+#if DEBUG
         std::cout << "MD: Value of RangeDiff: " << rangeDiff << std::endl;
+#endif 
         while(e1 != b1){
             dig_1 = *b1;
             dig_2 = *b2;
-
+#if DEBUG
             std::cout << "MD: Value of dig_1: " << dig_1 << std::endl;
             std::cout << "MD: Value of dig_2: " << dig_2 << std::endl << std::endl;
-            diff = dig_1 - dig_2;
+#endif         
+         diff = dig_1 - dig_2;
             if(diff < 0){
                 carry = true;
                 dig_1+=10;
                 diff = dig_1 - dig_2;
-                std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
+#if DEBUG      
+      std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
                 std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
-               
+#endif        
+
             }
 	    else
 		carry = false;
@@ -229,22 +234,24 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
                 count++;
         }
 
-        std::cout << "MD: Count should equal len1: " << count << std::endl;
+      //  std::cout << "MD: Count should equal len1: " << count << std::endl;
 
         while(e2 != b2){
             
             dig_1 = 10;
             dig_2 = *b2;
             diff = dig_1 - dig_2;
-	    std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
+#if DEBUG	    
+        std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
+#endif
             *x = diff;
             ++x;
             ++b2;
             count++;
         }
-
+#if DEBUG
         std::cout << "MD: Len1 + rangeDiff: " << count << std::endl << std::endl << std::endl;
-		
+#endif		
 		int output_len = rangeDiff + len1;
         if(carry){
             
@@ -252,8 +259,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
             for(int i = 0; i < output_len; i++){
                 diff = 10 - *x;
                 *x = diff;
-		std::cout << "This is the value of *x: " << *x << std::endl;
-                --x;
+#if DEBUG		
+        std::cout << "This is the value of *x: " << *x << std::endl;
+#endif            
+            --x;
             }
 
         //std::cout << "This is the value of *x: " << *x << std::endl;
@@ -263,8 +272,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 	else{
 		
 		--x;
-		std::cout << "Starting value of *x: " << *x << std::endl;
-		int loopRange = rangeDiff + len1;
+#if DEBUG
+        std::cout << "Starting value of *x: " << *x << std::endl;
+#endif		
+        int loopRange = rangeDiff + len1;
 		int tmpRange = rangeDiff ;
 		int k = 0;
 		
@@ -279,8 +290,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 
 		*x = diff;
 		k++;
-		std::cout << "This is the value of *x: " << *x << std::endl;
-		--x;
+#if DEBUG	
+    std::cout << "This is the value of *x: " << *x << std::endl;
+#endif		
+        --x;
 	    }
 			
 	}
@@ -301,10 +314,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
                 	carry = true;
                 	dig_1+=10;
                 	diff = dig_1 - dig_2;
-		
+#if DEBUG		
                 std::cout << "MD: Value of dig_1 after addition: "  << dig_1 << std::endl;
                 std::cout << "MD: Value of diff after subtracting dig_2: " << diff << std::endl << std::endl;
-               
+#endif      
            	 }
 	    	else{
 			if(carry && diff != 0){
@@ -313,9 +326,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 			}					
 
 			carry = false;
-		}	 
+		}
+#if DEBUG
                	 std::cout << "MD: Value of diff after if/else diff: " << diff << std::endl;
-
+#endif
 		if(carry){
 			int tmp = diff;
 			diff = 10 - tmp;
@@ -422,8 +436,10 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
 		    dig_1 = *b1;
             	    dig_2 = 0;
             	    diff = dig_1 - dig_2;
-	    	    std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
-            	    *x = diff;
+#if DEBUG
+         std::cout << "MD: Value of diff after first While loop: " << diff << std::endl;
+#endif
+                    *x = diff;
             	    ++x;
             	    ++b1;
             	    count++;
@@ -471,12 +487,15 @@ template <typename II1, typename II2, typename FI>
 
 	II2 b2_copy = b2;
 	II2 e2_copy = e2;
-	II1 sum1 = b1;
-	II2 sum2 = b2;
-	FI x_copy = x;
+    II1 sum;
+	FI x_init = x;
+    FI x_end = x_init;
+    FI result = x;
 	int lenseq1 = 0;
 	int lenseq2 = 0;
-	int pow = 1;
+	int product = 0;
+    int carry = 0;
+    int dec_pos = 0;
 	while(e1_copy != b1_copy){
         	++lenseq1;
         	--e1_copy;
@@ -492,24 +511,41 @@ template <typename II1, typename II2, typename FI>
 		e1_copy = e1;
 
 	if(lenseq1 > lenseq2){
-	    
-	    for(int i = 1; i < lenseq2 + 1; ++i){
-		
-		int loopSum = *e2_copy;
-		
-		if(loopSum % 2 == 0 && loopSum != 0){
-		    //vector<int> v;
-			
-		    //FI tmp = v.begin();
-			//++tmp;
-		    plus_digits (b1_copy, e1_copy, b1_copy, e1_copy, x_copy);
-		}
-		else{
-		}
-		pow*=10;
-		++e2_copy;	   
-	    }
-		
+	    while(e2_copy != b2_copy){
+            for(int i = 0; i < dec_pos; ++i){
+                
+                ++x_init;
+                *x_init = 0;
+            }
+                while(e1_copy != b1_copy){
+                    product = (*e1_copy) * (*e2_copy) + carry;
+                    carry = product/10;
+                    ++x_init;
+                    *x_init = product % 10;
+                    --e1_copy;
+                }
+                
+                if(carry > 0){
+                    ++x_init;
+                    *x_init = carry;
+                }
+                
+                int count = 0;
+                II1 sum_begin;
+                while(x_end != x_init){
+                   
+                   if(count = 0){
+                        *sum = *x_end;
+                        sum_begin = sum;
+                        ++sum;
+                        ++x_end;
+                    }
+                    ++count;
+                }
+
+                //x = plus_digits(sum_begin, sum, 
+
+            }	
 	}
 	
 	if(lenseq1 < lenseq2){
@@ -1040,23 +1076,42 @@ template <typename T, typename C = std::vector<T> >
 
             typename C::const_iterator e2 = rhs._x.end();
             int larger = this->_len;
+            int lhslen = this->_len;
             if(rhs._len > larger)
                 larger = rhs._len;
             C newContainer(larger + 1);
             if(this->_neg == rhs._neg){
+                if(rhs._len > lhslen && this->_neg){
+                typename C::iterator newSize = plus_digits(b1, e1, b2, e2, newContainer.begin());
+               
+               }
+                if(rhs._len > lhslen && !this->_neg){
+                
                 typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
+
                 this->_len = newSize - newContainer.begin();
+                }
+                
                 //std::cout << "newSize: " << this->_len <<std::endl;
                 this->_x = newContainer;
-                this->_x.resize(this->_len);
+           //     this->_x.resize(this->_len);
             }
 
             else{
+                
+                if(rhs._len > lhslen && this->_neg){
+                typename C::iterator newSize = plus_digits(b1, e1, b2, e2, newContainer.begin());
+                    this->_neg = true;
+                }
+                if(rhs._len > lhslen && !this->_neg){
+                
+                typename C::iterator newSize = plus_digits(b1, e1, b2, e2, newContainer.begin());
+                }
                 typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
                 this->_len = newSize - newContainer.begin();
                 //std::cout << "newSize: " << this->_len <<std::endl;
                 this->_x = newContainer;
-                this->_x.resize(this->_len);
+             //   this->_x.resize(this->_len);
             }
             //std::cout << "End of newContainer: " << *(--newContainer.end()) <<std::endl;
             // if(*(newContainer.end()--) == 0){
