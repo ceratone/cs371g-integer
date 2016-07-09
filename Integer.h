@@ -186,7 +186,6 @@ FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
     II2 e2_copy = e2;
     FI x_begin = x;
     //++b1;
-
     while(e1_copy != b1){
         ++len1;
         --e1_copy;
@@ -489,7 +488,7 @@ template <typename II1, typename II2, typename FI>
 	II2 b2_copy = b2;
 	II2 e2_copy = e2;
 	FI x_init = x;
-    FI x_end = x_init;
+    FI x_end = x;
     FI result_fr = x;
     FI result_end = result_fr;
 	int lenseq1 = 0;
@@ -497,7 +496,10 @@ template <typename II1, typename II2, typename FI>
 	int product = 0;
     int carry = 0;
     int dec_pos = 0;
-	while(e1_copy != b1_copy){
+
+//#if DEBUG
+//#endif
+/*	while(e1_copy != b1_copy){
         	++lenseq1;
         	--e1_copy;
     	}
@@ -510,65 +512,62 @@ template <typename II1, typename II2, typename FI>
 	
 		e2_copy = e2;
 		e1_copy = e1;
-
-	if(lenseq1 > lenseq2){
+*/
+	if(1){
 	    while(e2_copy != b2_copy){
         
+    std::cout << "Do I enter multiplies for loop" << std::endl;
         int count = 0;
             for(int i = 0; i < dec_pos; ++i){
                 
-                ++x_end;
                 *x_end = 0;
+                ++x_end;
             }
                 while(e1_copy != b1_copy){
-                    product = (*e1_copy) * (*e2_copy) + carry;
+                    product = (*b1_copy) * (*b2_copy) + carry;
                     carry = product/10;
-                    ++x_end;
                     *x_end = product % 10;
-                    --e1_copy;
-                
+                    ++b1_copy;
+                    ++x_end;
                 }
                 
                 if(carry > 0){
-                    ++x_end;
                     *x_end = 0;
+                    ++x_end;
                 }
 
-            II1 tmp;
-            II2 tmp_end;
-            
+            std::cout << "Do I get past the 1st while loop before plus equals" << std::endl;
+            II1 tmp=b1;
+            II2 tmp_end= b1;
             while(x_end != x_init){
-                *tmp = *x_init;
-                if(count == 0)
-                    tmp_end = tmp;
+                *tmp = *x_end;
                 ++x_init;
                 ++tmp;
+                std::cout << "how many times does the loop run" << std::endl;
             }
+            
 
             int chk = 0;
-            II1 rhs_param;
-            II1 rhs_param_end;
+            II1 rhs_param = b1;
+            II1 rhs_param_end = b1;
 
             while(result_end != result_fr){
+                
                 *rhs_param = *result_end;
-                if(chk ==0)
-                    rhs_param_end = rhs_param;
                 ++rhs_param;
                 ++result_end;
             }
-
-            result_end = plus_digit(tmp, tmp_end, rhs_param, rhs_param_end);
+            std::cout << "Do I get past the 2nd while loop before plus equals" << std::endl;
+                result_end = x;
+                result_fr = x;
+            result_end = plus_digits(tmp, tmp_end, rhs_param, rhs_param_end, x);
             
             ++dec_pos;
             x_init = x;
-            --e2_copy;
+            x_end = x;
+            ++b2_copy;
         }
     }
-	if(lenseq1 < lenseq2){
-	}
-
-	if(lenseq1 == lenseq2){
-	}
 
     x = result_end;
     return x;}
@@ -1157,6 +1156,34 @@ template <typename T, typename C = std::vector<T> >
          */
          Integer& operator *= (const Integer& rhs) {
             // <your code>
+
+            typename C::iterator b1 = this->_x.begin();
+            typename C::iterator e1 = this->_x.end();
+            typename C::const_iterator b2 = rhs._x.begin();
+            typename C::const_iterator e2 = rhs._x.end();
+            int larger = this->_len;
+            C newContainer(larger + 1);
+                typename C::iterator newSize = plus_digits(b1, e1, b2, e2, newContainer.begin());
+                this->_len = newSize - newContainer.begin();
+                //std::cout << "newSize: " << this->_len <<std::endl;
+                //std::cout << "newSize: " << this->_len <<std::endl;
+                this->_x = newContainer;
+                this->_x.resize(this->_len);
+            //std::cout << "End of newContainer: " << *(--newContainer.end()) <<std::endl;
+            // if(*(newContainer.end()--) == 0){
+            //     this->_len = newContainer.size() - 1;
+            //     std::cout << "newSize smaller: " << this->_len <<std::endl;
+            // }
+            // else
+                
+     
+                                                                    
+            int count = 1;                                                      
+            for(typename C::iterator its = this->_x.begin(); its != this->_x.end(); ++its){    
+                std::cout << "+=: Current digit at position " << count << " is " << *its << std::endl;
+                count++;                                                        
+            }                                                                   
+ 
             return *this;}
 
         // -----------
