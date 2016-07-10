@@ -4,7 +4,7 @@
 // Glenn P. Downing
 // ------------------------------
 
-#define DEBUG 
+//#define DEBUG 
 
 #ifndef Integer_h
 #define Integer_h
@@ -21,6 +21,23 @@
 #include <vector>    // vector
 #include <sstream>  // istringstream
 #include <cstdlib> //needed for atoi
+
+
+// ---------------
+// is_canceled out
+// ---------------
+template <typename II>
+bool is_canceled_out (II b, II e){
+    ++e;
+    while(b != e){
+        if(*b!=0)
+            return false;
+        ++b;
+    }
+    return true;
+}
+
+
 // ----------------
 // shift_left_digits
 // -----------------
@@ -38,13 +55,11 @@ template <typename II, typename FI>
  FI shift_left_digits (II b, II e, int n, FI x) {
     assert(n >= 0);
     while(n != 0){
+
         *x = 0;
         n--;
         x++;
     }
-    // if(b==e){
-    //     *x = *b;
-    // }
     while(b != e){
         *x = *b;
         x++;
@@ -96,7 +111,6 @@ template <typename II, typename FI>
  */
 template <typename II1, typename II2, typename FI>
  FI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
-    std::cout<<"Plus digits"<<std::endl;
     bool carry = false;
     while(b2!= e2){
         if(b1 != e1){
@@ -179,21 +193,18 @@ template <typename II1, typename II2, typename FI>
  */
 template <typename II1, typename II2, typename FI>
  FI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
-    std::cout << "Enter minus digits\n";
-    if(*b1 == 0){
+    if((e1-b1 == 1) && *b1 == 0){
         II2 cb2 = b2;
         while(cb2 != e2){
             *x = *cb2;
-            std::cout << "1val: "<<*x<<std::endl;
             ++x;
             ++cb2;
         }
         *x = '-';
-        std::cout << "2val: "<<*x<<std::endl;
         ++x;
         return x;
     }
-    if(*b2 == 0){
+    if((e2-b2 == 1) && *b2 == 0){
         II1 cb1 = b1;
         while(cb1 != e1){
             *x = *cb1;
@@ -202,95 +213,80 @@ template <typename II1, typename II2, typename FI>
         }
         return x;
     }
-    std::cout << "-----------------Hello\n";
     FI cx = x;
     bool borrow = false;
-    bool neg_ans = false;
     while (b2 != e2){
-        std::cout << "In loop\n";
         if(b1 != e1){
             *cx = *b1 - *b2;
             if(borrow){
                 --*cx;
-                std::cout << "borrow from prev cx now "<<*cx<<std::endl;
                 borrow = false;
             }
             if(*cx < 0){
                 *cx += 10;
-                std::cout << "setting borrow cx now "<<*cx<<std::endl;
+                if((e2-b2 == 1)&&(e1-b1 == 1)){
+                    ++cx;
+                    *cx = 'N';
+                    ++cx;
+                    goto done;
+                }
                 borrow = true;
             }
             ++b1;
-            std::cout << "val: "<<*cx<<std::endl;
             ++cx;
         }
         else{
-            std::cout << "rhs is longer than lhs\n";
-            neg_ans = true;
             if(borrow){
                 *cx = 9 - *b2;
-                std::cout << "rhs longer: setting *x as: "<<*cx<<std::endl;
-                if(b2 == (--e2)){
+                if(e2-b2 == 1){
                     ++cx;
-                    *cx = '-';
+                    *cx = 'N';
                     ++cx;
                     break;
                 }
-                else/* if(b2 != (--e2))*/{
+                else
                     borrow = true;
-                }
-                std::cout << "rhs longer: borrowing from prev: setting *x as: "<<*cx<<std::endl;
                 ++cx;
             }
             else{
-                std::cout << "rhs longer: not borrow\n";
                 *cx = 10-*b2;
-                std::cout << "rhs longer: no borrow: val: "<<*cx <<std::endl;
                 ++cx;
             }
         }
         ++b2;
     }
+
     if(b1 != e1){
         if(borrow){
             while(borrow){
-                if(*b1 - 1 < 0){
-                    borrow = true;
-                    std::cout << "A\n";
-                    *cx = 9;
-                }
-                else if (b1 == (--e1)){
-                    std::cout << "B\n";
-                    //++cx;
+                if (e1-b1 == 1){
+                    ++e1;
                     break;
                 }
+                else if(*b1 == 0){
+                    borrow = true;
+                    *cx = 9;
+                } 
                 else{
-                    std::cout << "C\n";
                     borrow = false;
-                    *cx = *b1 - 1;
+                    if(*b1 - 1 != 0){
+                        *cx = *b1 - 1;
+                    }
                 }
-                std::cout << "D\n";
                 ++cx;
                 ++b1;
             }
         }
         else{
-            std::cout << "E\n";
             while(b1 != e1){
-                std::cout << "F\n";
                 *cx = *b1;
-                std::cout << "G\n";
                 ++cx;
                 ++b1;
             }
         }
     }
-
-    if(neg_ans){
-        return cx;
-    }
-    else
-        return cx;
+    done:
+    return cx;
 }
 
 // -----------------
@@ -310,8 +306,61 @@ template <typename II1, typename II2, typename FI>
  */
 template <typename II1, typename II2, typename FI>
  FI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
-    // <your code>
-    return x;}
+
+    if((e1-b1 == 1 &&*b1 == 0)||(e2-b2 == 1 && *b2 == 0)){
+        *x = 0;
+        ++x;
+        return x;
+    }
+    short larger = (e1-b1);
+    if(e2-b2>larger)
+        larger = e2-b2;
+    short shift = 0;
+    short productLength = larger * 2;
+    std::vector<short> newContainer(productLength);
+    std::vector<short>::iterator product = newContainer.begin();
+    while(b2!=e2){
+        II1 b1Copy = b1;
+        if(*b2 == 0){
+            ++shift;
+            ++b2;
+        }
+        std::vector<short> thisSum(productLength);
+        std::vector<short>::iterator thisSum_it_b = thisSum.begin();
+        std::vector<short>::iterator thisSum_it_e = thisSum.end();
+        short carry = 0;
+        while(b1Copy!= e1){
+            short temp = ((*b2) * (*b1Copy));
+            if(*b1Copy != 0)
+                temp+= carry;
+            else{
+                temp = carry;
+            }
+            carry = temp/10;
+            *thisSum_it_b = temp%10;
+            ++thisSum_it_b;
+            ++b1Copy;
+        }
+        if(carry){
+            *thisSum_it_b = carry;
+            ++thisSum_it_b;
+        }
+        std::vector<short> shifted(productLength);
+        std::vector<short>::iterator thisShift_it_b = shifted.begin();
+        std::vector<short>::iterator shiftResult = shift_left_digits(thisSum.begin(), thisSum_it_b, shift, thisShift_it_b);
+        product = plus_digits(newContainer.begin(), product, shifted.begin(), shiftResult, newContainer.begin());
+        
+        ++shift;
+        ++b2;
+    }
+    //Unload
+    for(std::vector<short>::iterator it = newContainer.begin(); it!= product; ++it){
+        *x = *it;
+        ++x;
+    }
+    return x;
+}
+
 
 // --------------
 // divides_digits
@@ -330,7 +379,44 @@ template <typename II1, typename II2, typename FI>
  */
 template <typename II1, typename II2, typename FI>
  FI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, FI x) {
-    // <your code>
+    if(e1-b1<e2-b2){
+        *x = 0;
+        ++x;
+        return x;
+    }
+    std::vector<short> last_num(0);
+    std::vector<short> num(1, 0);
+    std::vector<short> add_one(1, 1);
+    bool hit_Neg = false;
+    while(!hit_Neg){
+        bool tack_on = *num.begin() == 9;
+        if(tack_on)
+            std::vector<short> num(last_num.end()-last_num.begin()+1);
+        else
+            std::vector<short> num(last_num.end()-last_num.begin());
+        std::vector<short>::iterator endOf_num = plus_digits(num.begin(), num.end(), add_one.begin(), add_one.end(), num.begin());
+        II2 b2Copy = b2;
+        std::vector<short> product(e1 - b1);
+        std::vector<short>::iterator next_Multiple = multiplies_digits(b2Copy, e2, num.begin(), endOf_num, product.begin());
+        std::vector<short> diff(e1-b1+1);
+        II1 b1Copy = b1;
+        std::vector<short>::iterator diff_End = minus_digits(b1Copy, e1, product.begin(), next_Multiple, diff.begin());
+        if(*(--diff_End) == 'N'){
+            hit_Neg = true;
+            std::vector<short> neg_one(1, 1);
+            std::vector<short> out(e1-b1);
+            std::vector<short>::iterator last = minus_digits(num.begin(), endOf_num, neg_one.begin(), neg_one.end(), out.begin());
+            std::vector<short>::iterator it = out.begin();
+            while(it!=last){
+                *x = *it;
+                ++x;
+                ++it;
+            }
+        }
+        else{
+            last_num = num;
+        }
+    }
     return x;}
 
 // -------
@@ -350,30 +436,27 @@ template <typename T, typename C = std::vector<T> >
      friend bool operator == (const Integer& lhs, const Integer& rhs) {
         //assert(lhs && rhs);
         if(lhs._neg != rhs._neg){
-            std::cout<< "------------Signs do not match: lhs: "<<lhs._neg<<" vs. "<< rhs._neg <<std::endl;
             return false;
         }
         if(lhs._len != rhs._len){
-            std::cout << "--------------Lengths do not match" <<std::endl;
-            std::cout << "-----------Length of lhs: "<<lhs._len<<" vs. length of rhs: "<<rhs._len<< std::endl;
             return false;
         }
 
         typename C::const_iterator lhs_it = lhs._x.begin();
         typename C::const_iterator rhs_it = rhs._x.begin();
 
-
+        bool contents_equal = true;
         while(lhs_it != lhs._x.end() && rhs_it != rhs._x.end()){
             if(*lhs_it != *rhs_it){
-                std::cout<< "-----------Contents do not match" <<std::endl;
-                return false;
+                contents_equal =  false;
             }
-            std::cout<< "Contents of lhs: "<<*lhs_it<< " vs. contents of rhs: "<<*(rhs_it) <<std::endl;
             lhs_it++;
             rhs_it++;
         }
+        if(!contents_equal){
+            return false;
+        }
         if(lhs_it != lhs._x.end() || rhs_it != rhs._x.end()){
-            std::cout<< "-------------Inequal ends" <<std::endl;
             return false;
         }
         return true;}
@@ -643,9 +726,9 @@ template <typename T, typename C = std::vector<T> >
                 count++;
             }
             std::cout << std::endl;
-            std::cout << "Negative: "<< _neg << std::endl;
 #endif
             assert(valid());
+
         }
 
         /**
@@ -683,7 +766,6 @@ template <typename T, typename C = std::vector<T> >
                 std::cout << "explicit const: Current digit at position " << count << " is " << *it << std::endl;
                 count++;
             }
-            std::cout << "Negative: "<< _neg << std::endl; 
 #endif
         }
 
@@ -700,14 +782,7 @@ template <typename T, typename C = std::vector<T> >
          */
          Integer operator - () const {
             Integer x = *this;
-            //std::cout<< "previous sign of this int: "<<x._neg<< std::endl;
-            // for(typename C::iterator it = x._x.begin(); it != x._x.end(); ++it){
-            //     //std::cout << "Result of negate("<<*it<<") is: ";
-            //     *it = -(*it);
-            //     //std::cout << *it << std::endl;
-            // } 
             x._neg = !(x._neg);
-            //std::cout<< "result sign of this int: "<<x._neg<< std::endl;
             return x;}
 
         // -----------
@@ -719,8 +794,6 @@ template <typename T, typename C = std::vector<T> >
          */
          Integer& operator ++ () {
             typename C::iterator it = this->_x.begin();
-            //typename C::iterator e1 = this->_x.begin();
-            // 
             *this += 1;
 #ifdef DEBUG
             int count = 1;
@@ -790,20 +863,44 @@ template <typename T, typename C = std::vector<T> >
             else{
                 typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
                 if(*(--newSize) == '-'){
-                    std::cout << "switching sign\n";
                     this->_neg = !this->_neg;
                     this->_len = newSize - newContainer.begin();
                 }
-                else if(*newSize == 0){
-                    std::cout << "0 result\n";
+                else if(is_canceled_out(newContainer.begin(), newContainer.end())){
                     this->_neg = false;
                     this->_len = 1;
                 }
+                else if(*newSize == 'N'){           //LHS smaller than RHS
+                    C fromHigherContainer(newSize - newContainer.begin() + 1);
+                    C diffContainer(fromHigherContainer.size());
+                    typename C::iterator b1 = fromHigherContainer.begin();
+                    typename C::iterator e1 = fromHigherContainer.end();
+                    typename C::const_iterator b2 = newContainer.begin();
+                    typename C::const_iterator e2 = newSize;
+                    *(--e1) = 3;
+                    ++e1;
+                    typename C::iterator fromHigher = minus_digits(b1, e1, b2, e2, diffContainer.begin());
+                    this->_len = fromHigher - diffContainer.begin();
+                    newContainer = diffContainer;
+                    this->_neg = !this->_neg;
+                }
                 else{
-                    ++newSize;
+                    typename C::iterator b3 = newContainer.begin();
+                    typename C::iterator e3 = newContainer.end();
+                    --e3;
+                    while(b3!=e3){
+                        if(*e3!= 0){
+                            ++e3;
+                            newSize = e3;
+                            break;
+                        }
+                        --e3;
+                    }
+                    if(b3 == e3){
+                        newSize = (++e3);
+                    }
                     this->_len = newSize - newContainer.begin();
                 }
-                //this->_len = newSize - newContainer.begin();
                 this->_x = newContainer;
                 this->_x.resize(this->_len);
             }
@@ -832,24 +929,49 @@ template <typename T, typename C = std::vector<T> >
             int larger = this->_len;
             if(rhs._len > larger)
                 larger = rhs._len;
-            C newContainer(larger + 1);
-            std::cout<<"Size of the larger length: "<<larger << std::endl;
+            C newContainer(larger + 2);
             if(this->_neg == rhs._neg){
                 typename C::iterator newSize = minus_digits(b1, e1, b2, e2, newContainer.begin());
                 if(*(--newSize) == '-'){
-                    std::cout << "switching sign\n";
                     this->_neg = !this->_neg;
                     this->_len = newSize - newContainer.begin();
                 }
-                else if(*newSize == 0){
-                    std::cout << "0 result\n";
+                else if(is_canceled_out(newContainer.begin(), newContainer.end())){
                     this->_neg = false;
                     this->_len = 1;
                 }
+                else if(*newSize == 'N'){           //LHS smaller than RHS
+                    C fromHigherContainer(newSize - newContainer.begin() + 1);
+                    C diffContainer(fromHigherContainer.size());
+                    typename C::iterator b1 = fromHigherContainer.begin();
+                    typename C::iterator e1 = fromHigherContainer.end();
+                    typename C::const_iterator b2 = newContainer.begin();
+                    typename C::const_iterator e2 = newSize;
+                    *(--e1) = 3;
+                    ++e1;
+                    typename C::iterator fromHigher = minus_digits(b1, e1, b2, e2, diffContainer.begin());
+                    this->_len = fromHigher - diffContainer.begin();
+                    newContainer = diffContainer;
+                    this->_neg = !this->_neg;
+                }
                 else{
-                    ++newSize;
+                    typename C::iterator b3 = newContainer.begin();
+                    typename C::iterator e3 = newContainer.end();
+                    --e3;
+                    while(b3!=e3){
+                        if(*e3!= 0){
+                            ++e3;
+                            newSize = e3;
+                            break;
+                        }
+                        --e3;
+                    }
+                    if(b3 == e3){
+                        newSize = (++e3);
+                    }
                     this->_len = newSize - newContainer.begin();
                 }
+                
                 this->_x = newContainer;
                 this->_x.resize(this->_len);
             }
@@ -878,8 +1000,33 @@ template <typename T, typename C = std::vector<T> >
          * <your documentation>
          */
          Integer& operator *= (const Integer& rhs) {
-            // <your code>
-            return *this;}
+            if(this->_neg == rhs._neg){
+                this->_neg = false;
+            }
+            else
+                this->_neg = true;
+            
+            typename C::iterator b1 = this->_x.begin();
+            typename C::iterator e1 = this->_x.end();
+            typename C::const_iterator b2 = rhs._x.begin();
+            typename C::const_iterator e2 = rhs._x.end();
+
+            int larger = this->_len;
+            if(rhs._len > larger)
+                larger = rhs._len;
+            short productLength = 2*larger;
+            C newContainer(productLength);
+            typename C::iterator newSize = multiplies_digits(b1, e1, b2, e2, newContainer.begin());
+
+            this->_len = newSize - newContainer.begin();
+            this->_x = newContainer;
+            this->_x.resize(this->_len);
+            if(this->_len == 1 && *newContainer.begin() == 0)
+                this->_neg = false;
+            //assert(1==0);
+            return *this;
+        }
+
 
         // -----------
         // operator /=
@@ -890,8 +1037,29 @@ template <typename T, typename C = std::vector<T> >
          * @throws invalid_argument if (rhs == 0)
          */
          Integer& operator /= (const Integer& rhs) {
-            // <your code>
-            return *this;}
+
+            if(this->_neg == rhs._neg){
+                this->_neg = false;
+            }
+            else
+                this->_neg = true;
+            typename C::iterator b1 = this->_x.begin();
+            typename C::iterator e1 = this->_x.end();
+            typename C::const_iterator b2 = rhs._x.begin();
+            typename C::const_iterator e2 = rhs._x.end();
+            int larger = this->_len;
+            if(rhs._len > larger)
+                larger = rhs._len;
+            C newContainer(larger);
+            typename C::iterator newSize = divides_digits(b1, e1, b2, e2, newContainer.begin());
+            this->_len = newSize - newContainer.begin();
+            this->_x = newContainer;
+            this->_x.resize(this->_len);
+            if(this->_len == 1 && *newContainer.begin() == 0)
+                this->_neg = false;
+            //assert(1==0);
+            return *this;
+        }
 
         // -----------
         // operator %=
@@ -902,8 +1070,49 @@ template <typename T, typename C = std::vector<T> >
          * @throws invalid_argument if (rhs <= 0)
          */
          Integer& operator %= (const Integer& rhs) {
-            // <your code>
-            return *this;}
+            if(this->_neg)
+                this->_neg=!this->_neg;
+
+            typename C::iterator b1 = this->_x.begin();
+            typename C::iterator e1 = this->_x.end();
+            typename C::const_iterator b2 = rhs._x.begin();
+            typename C::const_iterator e2 = rhs._x.end();
+
+            C divides(this->_len);
+            typename C::iterator floor_Divide = divides_digits(b1, e1, b2, e2, divides.begin());
+            divides.resize(floor_Divide - divides.begin());
+
+            C newContainer(this->_len);
+            typename C::iterator cb1 = divides.begin();
+            typename C::iterator ce1 = divides.end();
+            typename C::const_iterator cb2 = rhs._x.begin();
+            typename C::const_iterator ce2 = rhs._x.end();
+            typename C::iterator mult_Diff = multiplies_digits(cb1, ce1, cb2, ce2, newContainer.begin());
+
+            C newRem(this->_len+1);
+            typename C::iterator c1b1 = this->_x.begin();
+            typename C::iterator c1e1 = this->_x.end();
+            typename C::iterator c2b2 = newContainer.begin();
+            typename C::iterator c2e2 = newContainer.end();
+            typename C::iterator get_Remainder = minus_digits(c1b1, c1e1, c2b2, c2e2, newRem.begin());
+
+            if(is_canceled_out(newRem.begin(), get_Remainder)){
+                std::cout<<"zeroed out\n";
+                this->_len = 1;
+            }
+            else{
+                typename C::reverse_iterator last_index = newRem.rbegin();
+                typename C::reverse_iterator end = newRem.rend();
+                while(last_index!=end){
+                    if(*last_index != 0)
+                        this->_len = end - last_index;
+                    ++last_index;
+                }
+            }
+            this->_x = newRem;
+            this->_x.resize(this->_len);
+            return *this;
+        }
 
         // ------------
         // operator <<=
@@ -976,8 +1185,22 @@ template <typename T, typename C = std::vector<T> >
          * @throws invalid_argument if ((this == 0) && (e == 0)) or (e < 0)
          */
          Integer& pow (int e) {
-            // <your code>
-            return *this;}
-        };
+            Integer start = *this;
+            Integer result = 1;
+            if(e == 0){
+                *this = result;
+            }
+            if(e > 1)
+                result = start.pow(e/2);  
+            if(!(e % 2)) 
+                result *= result;
+            else{      
+                result *= result;
+                result *= *this;
+            } 
+            *this = result;
+            return *this;
+        }
+    };
 
 #endif // Integer_h
